@@ -242,7 +242,7 @@ async def concluir_todas_as_tarefas(usuario_id: str, query, context) -> None:
     print(f"Tarefas concluídas para {usuario_id} no dia {dia_atual}: {concluidas[usuario_id][dia_atual]}")
 
     # Enviar a imagem após a conclusão das tarefas
-    imagem_path = 'gato.jpg'  # Caminho da imagem que você quer enviar
+    imagem_path = 'imagens/gato.jpg'  # Caminho da imagem que você quer enviar
     with open(imagem_path, 'rb') as imagem:
         await context.bot.send_photo(chat_id=usuario_id, photo=imagem)
 
@@ -254,7 +254,6 @@ async def concluir_todas(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     usuario_id = str(query.from_user.id)
     dia_atual = datetime.datetime.now().strftime('%Y-%m-%d')
     tarefas = tarefas_diarias.get(datetime.datetime.now().strftime('%A').lower(), [])
-
     if not tarefas:
         await query.edit_message_text("⚠️ Não há tarefas para concluir hoje.")
         return
