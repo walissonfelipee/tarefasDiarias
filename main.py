@@ -3,6 +3,7 @@ import json
 import datetime
 import os
 from dotenv import load_dotenv
+from telegram.ext import MessageHandler, filters
 
 # Carregar variáveis do .env
 load_dotenv()
@@ -81,6 +82,14 @@ def adicionar_pontos(usuario_id, pontos_adicionais):
     usuario_id = str(usuario_id)
     pontos[usuario_id] = pontos.get(usuario_id, 0) + pontos_adicionais
     salvar_pontos(pontos)
+
+# Função para lidar com mensagens não reconhecidas
+async def mensagem_invalida(update: Update,context: ContextTypes.DEFAULT_TYPE) -> None:
+    usuario_id = update.message.chat_id
+    await update.message.reply_text("⚠️ uai cebesta digite /start para iniciar.")
+    imagem_path = 'imagens/risos.png'  # Caminho da imagem que você quer enviar
+    with open(imagem_path, 'rb') as imagem:
+        await context.bot.send_photo(chat_id=usuario_id, photo=imagem)
 
 # Criar menu principal
 async def menu_principal(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -364,6 +373,8 @@ def main():
     application.add_handler(CallbackQueryHandler(concluir_todas, pattern="^concluir_todas$"))
     application.add_handler(CallbackQueryHandler(ver_ranking, pattern="^ver_ranking$"))
     application.add_handler(CallbackQueryHandler(trocar_pontos, pattern="^trocar_pontos$"))
+
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, mensagem_invalida))
 
     application.run_polling()
 
