@@ -2,6 +2,11 @@ import asyncio
 import json
 import datetime
 import os
+from dotenv import load_dotenv
+
+# Carregar variáveis do .env
+load_dotenv()
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
@@ -350,7 +355,7 @@ async def trocar_pontos(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 # Configuração e inicialização do bot
 def main():
-    application = Application.builder().token("7290914916:AAECwX4QSXHtAY-eKKSznpx5qEyLfxP6ASw").build()
+    application = Application.builder().token(TOKEN).build()
 
     application.add_handler(CommandHandler("start", menu_principal))
     application.add_handler(CallbackQueryHandler(ver_tarefas, pattern="^ver_tarefas$"))
